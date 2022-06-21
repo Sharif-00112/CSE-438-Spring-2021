@@ -1,0 +1,260 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2578
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;\red38\green38\blue38;\red255\green255\blue255;}
+{\*\expandedcolortbl;;\cssrgb\c20000\c20000\c20000;\cssrgb\c100000\c100000\c100000;}
+\margl1440\margr1440\vieww15420\viewh13160\viewkind0
+\deftab720
+\pard\pardeftab720\partightenfactor0
+
+\f0\fs28 \cf2 \cb3 \expnd0\expndtw0\kerning0
+Answer:\cb1 \
+\cb3 Client Program:\cb1 \
+\cb3 Client.java\cb1 \
+\cb3 package PaperScissorsStone;\cb1 \
+\cb3 import java.io.*;\cb1 \
+\cb3 import java.net.*;\cb1 \
+\cb3 class Client \{\cb1 \
+\cb3 /**\cb1 \
+\cb3 * The host\cb1 \
+\cb3 *\cb1 \
+\cb3 * @var string\cb1 \
+\cb3 *\cb1 \
+\cb3 */\cb1 \
+\cb3 private static String host = "localhost";\cb1 \
+\cb3 /**\cb1 \
+\cb3 * The port\cb1 \
+\cb3 *\cb1 \
+\cb3 * @var integer\cb1 \
+\cb3 */\cb1 \
+\cb3 private static Integer port = 1337;\cb1 \
+\cb3 /**\cb1 \
+\cb3 * The version of the client class\cb1 \
+\cb3 *\cb1 \
+\cb3 * @var double\cb1 \
+\cb3 */\
+private static Double versionNumber = 1.0;\cb1 \
+\cb3 /**\cb1 \
+\cb3 * A short welcome msg\cb1 \
+\cb3 *\cb1 \
+\cb3 * @var string\cb1 \
+\cb3 */\cb1 \
+\cb3 private static String msgWelcome = "--- Welcome to Paper Scissors Stone V. "\cb1 \
+\cb3 \'a0\'a0 + versionNumber + " --- \\n";\cb1 \
+\cb3 /**\cb1 \
+\cb3 * The help context\cb1 \
+\cb3 *\cb1 \
+\cb3 * @var string\cb1 \
+\cb3 *\cb1 \
+\cb3 */\cb1 \
+\cb3 private static String msgRules = "\\nRule set:\\n - (R)ock beats (S)cissors\\n - (S)cissors beats (P)aper\\n - (P)aper beats (R)ock\\n";\cb1 \
+\cb3 public static void main(String args[]) throws Exception \{\
+\
+\'a0\'a0 String input = "";\cb1 \
+\cb3 \'a0\'a0 String response;\cb1 \
+\cb3 \'a0\'a0 System.out.println(Client.msgWelcome);\cb1 \
+\cb3 \'a0\'a0 BufferedReader inFromUser = new BufferedReader(new InputStreamReader(\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 System.in));\cb1 \
+\cb3 \'a0\'a0 Socket clientSocket = new Socket(Client.host, Client.port);\cb1 \
+\cb3 \'a0\'a0 DataOutputStream outToServer = new DataOutputStream(\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 clientSocket.getOutputStream());\cb1 \
+\cb3 \'a0\'a0 BufferedReader inFromServer = new BufferedReader(new InputStreamReader(\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 clientSocket.getInputStream()));\cb1 \
+\cb3 \'a0\'a0 do \{\cb1 \
+\cb3 \'a0\'a0 if (input.equals("-rules")) \{\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 System.out.println(Client.msgRules);\cb1 \
+\cb3 \'a0\'a0 \}\
+\
+// Prompt user for select rock, paper or scissors ...\cb1 \
+\cb3 \'a0\'a0 System.out\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 .println("Start the game by selecting (R)ock (P)aper, (S)cissors");\cb1 \
+\cb3 \'a0\'a0 System.out.print("or type \\"-rules\\" in order to see the rules: ");\cb1 \
+\cb3 \'a0\'a0 input = inFromUser.readLine();\cb1 \
+\cb3 \'a0\'a0 \} while (!input.equals("R") && !input.equals("P") && !input.equals("S"));\cb1 \
+\cb3 \'a0\'a0 // Transmit input to the server and provide some feedback for the user\cb1 \
+\cb3 \'a0\'a0 outToServer.writeBytes(input + "\\n");\cb1 \
+\cb3 \'a0\'a0 System.out\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 .println("\\nYour input ("\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 + input\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 + ") was successfully transmitted to the server. Now just be patient and wait for the result ...");\cb1 \
+\cb3 \'a0\'a0 // Catch respones\cb1 \
+\cb3 \'a0\'a0 response = inFromServer.readLine();\cb1 \
+\cb3 \'a0\'a0 // Display respones\cb1 \
+\cb3 \'a0\'a0 System.out.println("Response from server: " + response);\cb1 \
+\cb3 \'a0\'a0 // Close socket\cb1 \
+\cb3 \'a0\'a0 clientSocket.close();\cb1 \
+\cb3 \}\cb1 \
+\cb3 \}\
+\
+\
+\
+\
+\
+Server.java\cb1 \
+\cb3 package PaperScissorsStone;\cb1 \
+\cb3 import java.io.*;\cb1 \
+\cb3 import java.net.*;\cb1 \
+\cb3 import java.util.Scanner;\cb1 \
+\cb3 public class Server \{\cb1 \
+\cb3 \'a0\'a0 /**\cb1 \
+\cb3 \'a0\'a0 * The defautl port number\cb1 \
+\cb3 \'a0\'a0 *\cb1 \
+\cb3 \'a0\'a0 * @var integer\cb1 \
+\cb3 \'a0\'a0 *\cb1 \
+\cb3 \'a0\'a0 */\cb1 \
+\cb3 \'a0\'a0 private static Integer port = 1337;\cb1 \
+\cb3 \'a0\'a0 /**\cb1 \
+\cb3 \'a0\'a0 * The script version number\cb1 \
+\cb3 \'a0\'a0 *\cb1 \
+\cb3 \'a0\'a0 * @var integer\cb1 \
+\cb3 \'a0\'a0 *\cb1 \
+\cb3 \'a0\'a0 */\cb1 \
+\cb3 \'a0\'a0 private static Double versionNumber = 1.0;\cb1 \
+\cb3 \'a0\'a0 /**\cb1 \
+\cb3 \'a0\'a0 * The welcome boiler plate\cb1 \
+\cb3 \'a0\'a0 *\cb1 \
+\cb3 \'a0\'a0 * @var string\cb1 \
+\cb3 \'a0\'a0 *\cb1 \
+\cb3 \'a0\'a0 */\cb1 \
+\cb3 \'a0\'a0 private static String welcomeMsg = "--- Welcome to Paper Scissors Stone Server V. " + versionNumber + " --- \\n";\
+\
+/**\cb1 \
+\cb3 \'a0\'a0 * Function takes an integer x as an input and returns the boolean value\cb1 \
+\cb3 \'a0\'a0 * true if the input is strictly greater than 0 and less than or equal to\cb1 \
+\cb3 \'a0\'a0 * 65535.\cb1 \
+\cb3 \'a0\'a0 *\cb1 \
+\cb3 \'a0\'a0 * @param integer\cb1 \
+\cb3 \'a0\'a0 * x\cb1 \
+\cb3 \'a0\'a0 * @return boolean\cb1 \
+\cb3 \'a0\'a0 */\cb1 \
+\cb3 \'a0\'a0 private static boolean validPort(Integer x) \{\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 return x >= 1 && x <= 65535 ? true : false;\cb1 \
+\cb3 \'a0\'a0 \}\cb1 \
+\cb3 \'a0\'a0 /**\cb1 \
+\cb3 \'a0\'a0 * Function prompts the user to choose a specific port number or to press\cb1 \
+\cb3 \'a0\'a0 * enter in order to continue with default setting (Server.port).\cb1 \
+\cb3 \'a0\'a0 *\cb1 \
+\cb3 \'a0\'a0 * The returned integer strictly greater than 0 and less than or equal to\cb1 \
+\cb3 \'a0\'a0 * 65535.\cb1 \
+\cb3 \'a0\'a0 *\cb1 \
+\cb3 \'a0\'a0 * @return integer\cb1 \
+\cb3 \'a0\'a0 */\cb1 \
+\cb3 \'a0\'a0 private static int getPort() \{\
+\
+Integer input;\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 Scanner sc = new Scanner(System.in);\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 do \{\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 System.out.print("Please select a port by entering an integer value between 1 and 65535 or\\n");\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 System.out.print("insert \\"0\\" in order to continue with the default setting (" + Server.port + "): ");\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 input = sc.nextInt();\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \} while (input != 0 && !Server.validPort(input));\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 sc.close();\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 return input == 0 ? Server.port : input;\cb1 \
+\cb3 \'a0\'a0 \}\cb1 \
+\cb3 \'a0\'a0 public static void main(String args[]) throws Exception \{\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 String resClient_1 = "";\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 String resClient_2 = "";\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 String inputClient_1;\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 String inputClient_2;\
+\
+// Print welcome msg\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 System.out.println(Server.welcomeMsg);\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 // Set port\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 Server.port = Server.getPort();\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 // Create new server socket & dump out a status msg\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 ServerSocket welcomeSocket = new ServerSocket(Server.port);\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 System.out.println("\\nOk, we're up and running on port " + welcomeSocket.getLocalPort() + " ...");\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 while (!welcomeSocket.isClosed()) \{\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 // Player one\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 Socket client_1 = welcomeSocket.accept();\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 if (client_1.isConnected()) \{\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 System.out.println("\\nPlayer one (" + (client_1.getLocalAddress().toString()).substring(1) + ":"\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 + client_1.getLocalPort() + ") has joined ... waiting for player two ...");\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 \}\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 DataOutputStream outClient_1 = new DataOutputStream(client_1.getOutputStream());\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 BufferedReader inClient_1 = new BufferedReader(new InputStreamReader(client_1.getInputStream()));\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 // Player two\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 Socket client_2 = welcomeSocket.accept();\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 if (client_2.isConnected()) \{\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 System.out.println("Player two (" + (client_2.getLocalAddress().toString()).substring(1) + ":"\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 + client_1.getLocalPort() + ") has joined ... lets start ...");\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 \}\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 DataOutputStream outClient_2 = new DataOutputStream(client_2.getOutputStream());\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 BufferedReader inClient_2 = new BufferedReader(new InputStreamReader(client_2.getInputStream()));\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 // Get client inputs\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 inputClient_1 = inClient_1.readLine();\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 inputClient_2 = inClient_2.readLine();\
+\
+/**\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 * If the characters received from C1 and C2 are the same then the\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 * server sends back to both clients the string "DRAW".\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 */\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 if (inputClient_1.equals(inputClient_2)) \{\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 resClient_1 = "Draw";\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 resClient_2 = "Draw";\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 System.out.println("It's a draw.");\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 \}\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 /**\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 * If the server receives \'92R\'92 from C1 and \'92S\'92 from C2 it sends the\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 * string "YOU WIN" to C1 and the string "YOU LOSE" to C2.\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 */\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 else if (inputClient_1.equals("R") && inputClient_2.equals("S")) \{\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 resClient_1 = "You win";\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 resClient_2 = "You lose";\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 System.out.println("Player one wins.");\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 \}\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 /**\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 * If the server receives \'92S\'92 from C1 and \'92R\'92 from C2 it sends the\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 * string "YOU LOSE" to C1 and the string "YOU WIN" to C2.\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 */\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 else if (inputClient_1.equals("S") && inputClient_2.equals("R")) \{\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 resClient_1 = "You lose";\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 resClient_2 = "You win";\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 System.out.println("Player two wins.");\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 \}\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 /**\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 * If the server receives \'92R\'92 from C1 and \'92P\'92 from C2 it sends the\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 * string "YOU LOSE" to C1 and the string "YOU WIN" to C2.\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 */\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 else if (inputClient_1.equals("R") && inputClient_2.equals("P")) \{\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 resClient_1 = "You lose";\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 resClient_2 = "You win";\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 System.out.println("Player two wins.");\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 \}\
+\
+/**\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 * If the server receives \'92P\'92 from C1 and \'92R\'92 from C2 it sends the\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 * string "YOU WIN" to C1 and the string "YOU LOSE" to C2.\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 */\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 else if (inputClient_1.equals("P") && inputClient_2.equals("R")) \{\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 resClient_1 = "You win";\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 resClient_2 = "You lose";\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 System.out.println("Player one wins.");\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 \}\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 /**\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 * If the server receives \'92S\'92 from C1 and \'92P\'92 from C2 it sends the\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 * string "YOU WIN" to C1 and the string "YOU LOSE" to C2.\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 */\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 else if (inputClient_1.equals("S") && inputClient_2.equals("P")) \{\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 resClient_1 = "You win";\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 resClient_2 = "You lose";\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 System.out.println("Player one wins.");\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 \}\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 /**\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 * If the server receives \'92P\'92 from C1 and \'92S\'92 from C2 it sends the\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 * string "YOU LOSE" to C1 and the string "YOU WIN" to C2.\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 */\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 else if (inputClient_1.equals("P") && inputClient_2.equals("S")) \{\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 resClient_1 = "You lose";\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 resClient_2 = "You win";\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 System.out.println("Player two wins.");\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 \}\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 // Send responses in uppercase and close sockets\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 outClient_1.writeBytes(resClient_1.toUpperCase());\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 outClient_2.writeBytes(resClient_2.toUpperCase());\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 client_1.close();\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 client_2.close();\cb1 \
+\cb3 \'a0\'a0 \'a0\'a0\'a0 \'a0\'a0\'a0 System.out.println("\\nWaiting for new players ...\\n");\
+\
+\'a0\'a0 \'a0\'a0\'a0 \}\cb1 \
+\cb3 \'a0\'a0 \}\cb1 \
+\cb3 \}}
